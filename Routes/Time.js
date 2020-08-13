@@ -72,7 +72,7 @@ const createTeam = (response) => {
 
 // THIS NEEDS JWT / ADMIN LOGIN before launch
 // Trigger to get data from ext-API and *CREATE* document in MongoDB
-router.post('/create/profile', (req, res)=>{
+router.post('/profile', (req, res)=>{
   (async () => {
     try {
       // 1. Get the data from API
@@ -81,12 +81,12 @@ router.post('/create/profile', (req, res)=>{
       Time.findOne({'profile.time_id': req.body.time_id}, function (err, dbResult) {
         // Check if team already exists in db
         if (dbResult) {
-          // if it exists, respond accordingly
-          res.send("Esse time já existe na base de dados");
+          // if it exists, serve it
+          res.send(dbResult)
         } else {
           // if it doesn't create it there
-                const reply = createTeam(response);
-      res.send(reply);
+          const reply = createTeam(response);
+          res.send(reply);
         }
       })
 
@@ -126,34 +126,4 @@ router.post('/search/', (req, res)=>{
   })();
 });
 
-// router.post('/analisar/', (req, res)=>{
-//   (async () => {
-//     try {
-//       // 1. Test if exists within DB 
-//       console.log("got req", req.body)
-//       Time.findOne({'profile.time_id': req.body.time_id}, function (err, time) {
-//         if (!time) {
-//           // 1a.1 False > Create it
-
-//           // 1a.2 Serve the newly created data back (use existing route?)
-//         } else {
-          
-//         }
-//       });
-
-        
-        
-//         // 1b.1 True > Serve it
-      
-//       // Get the data from API
-//       const response = await got(
-//         `https://api.cartolafc.globo.com/time/id/${req.body.time_id}`,
-//         {responseType: 'json'}
-//       );
-
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   })();
-// });
 module.exports = router;
